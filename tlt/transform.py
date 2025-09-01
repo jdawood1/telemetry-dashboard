@@ -2,6 +2,7 @@ from __future__ import annotations
 from pathlib import Path
 import pandas as pd
 
+
 def transform_parquet(in_path: str | Path, out_path: str | Path) -> Path:
     """
     Read raw events parquet, compute daily aggregates, and write an aggregated parquet.
@@ -20,18 +21,10 @@ def transform_parquet(in_path: str | Path, out_path: str | Path) -> Path:
     df["date"] = pd.to_datetime(df["timestamp"]).dt.date
 
     # events per (date, feature)
-    events = (
-        df.groupby(["date", "feature_id"])
-        .size()
-        .reset_index(name="events")
-    )
+    events = df.groupby(["date", "feature_id"]).size().reset_index(name="events")
 
     # DAU per day
-    dau = (
-        df.groupby("date")["user_id"]
-        .nunique()
-        .reset_index(name="dau")
-    )
+    dau = df.groupby("date")["user_id"].nunique().reset_index(name="dau")
 
     # optional latency metrics if present
     if "latency_ms" in df.columns:
@@ -51,4 +44,3 @@ def transform_parquet(in_path: str | Path, out_path: str | Path) -> Path:
 
     agg.to_parquet(out_path, index=False)
     return out_path
-

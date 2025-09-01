@@ -1,6 +1,7 @@
 from pathlib import Path
 import pandas as pd
 
+
 def ingest_csv(input_path: str | Path, out_path: str | Path) -> Path:
     input_path, out_path = Path(input_path), Path(out_path)
 
@@ -20,4 +21,3 @@ def ingest_csv(input_path: str | Path, out_path: str | Path) -> Path:
     df.to_parquet(out_path, index=False)
 
     return out_path
-

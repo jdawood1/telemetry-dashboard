@@ -5,6 +5,7 @@ from tlt.report import make_reports
 
 SAMPLE = Path("sample/events.csv")
 
+
 def test_flow(tmp_path: Path):
     raw = tmp_path / "events.parquet"
     agg = tmp_path / "agg.parquet"

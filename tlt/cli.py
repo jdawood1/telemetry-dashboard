@@ -14,13 +14,15 @@ def cli():
 
 @cli.command("ingest")
 @click.option(
-    "--input", "input_path",
+    "--input",
+    "input_path",
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
     required=True,
     help="Input CSV with columns: timestamp,user_id,event,feature_id[,latency_ms]",
 )
 @click.option(
-    "--out", "out_path",
+    "--out",
+    "out_path",
     type=click.Path(dir_okay=False, path_type=Path),
     required=True,
     help="Output parquet path (parent dir will be created).",
@@ -36,13 +38,15 @@ def ingest_cmd(input_path: Path, out_path: Path):
 
 @cli.command("transform")
 @click.option(
-    "--in", "in_path",
+    "--in",
+    "in_path",
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
     required=True,
     help="Input parquet from ingest step.",
 )
 @click.option(
-    "--out", "out_path",
+    "--out",
+    "out_path",
     type=click.Path(dir_okay=False, path_type=Path),
     required=True,
     help="Output aggregated parquet (parent dir will be created).",
@@ -58,13 +62,15 @@ def transform_cmd(in_path: Path, out_path: Path):
 
 @cli.command("report")
 @click.option(
-    "--in", "in_path",
+    "--in",
+    "in_path",
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
     required=True,
     help="Input aggregated parquet from transform step.",
 )
 @click.option(
-    "--out", "out_dir",
+    "--out",
+    "out_dir",
     type=click.Path(file_okay=False, path_type=Path),
     required=True,
     help="Output directory for reports (metrics.txt, charts). Will be created.",

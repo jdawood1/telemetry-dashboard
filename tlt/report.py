@@ -1,8 +1,10 @@
 from pathlib import Path
 import pandas as pd
 import matplotlib
+
 matplotlib.use("Agg")  # CI/headless
 import matplotlib.pyplot as plt
+
 
 def make_reports(in_path: str | Path, out_dir: str | Path) -> Path:
     in_path, out_dir = Path(in_path), Path(out_dir)
@@ -23,7 +25,8 @@ def make_reports(in_path: str | Path, out_dir: str | Path) -> Path:
     plt.figure()
     usage.plot(kind="bar")
     plt.title("Feature Usage (Total Events)")
-    plt.xlabel("feature_id"); plt.ylabel("events")
+    plt.xlabel("feature_id")
+    plt.ylabel("events")
     plt.tight_layout()
     plt.savefig(out_dir / "feature_usage.png")
     plt.close()
@@ -45,14 +48,20 @@ def make_reports(in_path: str | Path, out_dir: str | Path) -> Path:
             if "dau" in df.columns:
                 # overall unique users can't be derived exactly from agg;
                 # report mean/max DAU instead
-                dau_by_day = df.drop_duplicates("date")[["date", "dau"]].set_index("date")["dau"]
+                dau_by_day = df.drop_duplicates("date")[["date", "dau"]].set_index(
+                    "date"
+                )["dau"]
                 f.write(f"Mean DAU: {float(dau_by_day.mean()):.1f}\n")
                 f.write(f"Max DAU: {int(dau_by_day.max())}\n")
 
             # Optional latency if present
             if {"p50", "p95"}.issubset(df.columns):
-                f.write(f"Median latency p50 (overall mean): {pd.to_numeric(df['p50'], errors='coerce').mean():.1f} ms\n")
-                f.write(f"Tail latency p95 (overall mean): {pd.to_numeric(df['p95'], errors='coerce').mean():.1f} ms\n")
+                f.write(
+                    f"Median latency p50 (overall mean): {pd.to_numeric(df['p50'], errors='coerce').mean():.1f} ms\n"
+                )
+                f.write(
+                    f"Tail latency p95 (overall mean): {pd.to_numeric(df['p95'], errors='coerce').mean():.1f} ms\n"
+                )
 
         else:
             # raw schema
@@ -66,5 +75,3 @@ def make_reports(in_path: str | Path, out_dir: str | Path) -> Path:
             f.write(f"Features: {n_features}\n")
 
     return out_dir
-
-

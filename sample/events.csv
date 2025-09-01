@@ -1,0 +1,4 @@
+timestamp,user_id,event,feature_id,latency_ms
+2025-08-01T14:00:01Z,u1,button_click,importer,63
+2025-08-01T14:00:05Z,u1,dialog_open,importer,48
+2025-08-01T14:02:11Z,u2,build,packager,47

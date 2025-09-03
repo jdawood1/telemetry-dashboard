@@ -48,3 +48,8 @@ addopts = "-q"
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+
+# basic Black config
+[tool.black]
+line-length = 100
+target-version = ["py311"]

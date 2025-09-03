@@ -1,0 +1,56 @@
+# pyproject.toml
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "telemetry-dashboard"
+version = "0.1.0"
+description = "End-to-end telemetry pipeline: ingest → transform → report."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "John Dawood" }]
+keywords = ["telemetry", "analytics", "etl", "metrics"]
+
+# Runtime deps only
+dependencies = [
+    "pandas",
+    "pyarrow",
+    "matplotlib",
+    "click",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2.0,<9",
+    "ruff>=0.5.0",
+    "black>=24.4.0",
+    "mypy>=1.10.0",
+]
+
+[project.scripts]
+tlt = "tlt.cli:cli"
+
+[project.urls]
+Homepage = "https://github.com/jdawood1/telemetry-dashboard"
+
+# Make package discovery explicit (your package is the top-level 'tlt/' dir)
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["tlt*"]
+
+# pytest config lives nicely here too
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+# basic Ruff config
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+# basic Black config
+[tool.black]
+line-length = 100
+target-version = ["py311"]

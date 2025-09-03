@@ -30,14 +30,16 @@ def cli() -> None:
 
 @cli.command("ingest", short_help="CSV → Parquet")
 @click.option(
-    "--input", "-i",
+    "--input",
+    "-i",
     "input_path",
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
     required=True,
     help="Input CSV with columns: timestamp,user_id,event,feature_id[,latency_ms]",
 )
 @click.option(
-    "--out", "-o",
+    "--out",
+    "-o",
     "out_path",
     type=click.Path(dir_okay=False, path_type=Path),
     required=True,
@@ -54,13 +56,15 @@ def ingest_cmd(input_path: Path, out_path: Path) -> None:
 
 @cli.command("transform", short_help="Aggregate daily metrics")
 @click.option(
-    "--in", "in_path",
+    "--in",
+    "in_path",
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
     required=True,
     help="Input Parquet from ingest step.",
 )
 @click.option(
-    "--out", "out_path",
+    "--out",
+    "out_path",
     type=click.Path(dir_okay=False, path_type=Path),
     required=True,
     help="Output aggregated Parquet (parent dir will be created).",
@@ -77,7 +81,8 @@ def transform_cmd(in_path: Path, out_path: Path, mau_window: int) -> None:
     try:
         p = _call_with_supported_args(
             transform_parquet,
-            in_path, out_path,
+            in_path,
+            out_path,
             mau_window=mau_window,
         )
         click.echo(f"Wrote: {p}")
@@ -87,13 +92,15 @@ def transform_cmd(in_path: Path, out_path: Path, mau_window: int) -> None:
 
 @cli.command("report", short_help="Generate charts + metrics")
 @click.option(
-    "--in", "in_path",
+    "--in",
+    "in_path",
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
     required=True,
     help="Input aggregated Parquet from transform step.",
 )
 @click.option(
-    "--out", "out_dir",
+    "--out",
+    "out_dir",
     type=click.Path(file_okay=False, path_type=Path),
     required=True,
     help="Output directory for reports (metrics.txt, charts). Will be created.",
@@ -113,15 +120,24 @@ def report_cmd(in_path: Path, out_dir: Path, events_path: Path | None) -> None:
     except Exception as e:
         raise click.ClickException(str(e)) from e
 
+
 @cli.command("size", short_help="Compare CSV vs Parquet sizes")
-@click.option("--csv", "csv_path", type=click.Path(exists=True, dir_okay=False, path_type=Path), required=True)
-@click.option("--parquet", "parquet_path", type=click.Path(exists=True, dir_okay=False, path_type=Path), required=True)
+@click.option(
+    "--csv", "csv_path", type=click.Path(exists=True, dir_okay=False, path_type=Path), required=True
+)
+@click.option(
+    "--parquet",
+    "parquet_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    required=True,
+)
 def size_cmd(csv_path: Path, parquet_path: Path) -> None:
     try:
         txt = size_mod.compare(csv_path, parquet_path)
         click.echo(txt)
     except Exception as e:
         raise click.ClickException(str(e)) from e
+
 
 if __name__ == "__main__":
     cli()

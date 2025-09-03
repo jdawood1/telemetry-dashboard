@@ -19,9 +19,9 @@ def _compute_mau(events: pd.DataFrame, window_days: int = 30) -> pd.DataFrame:
 
 
 def transform_parquet(
-        in_path: str | Path,
-        out_path: str | Path,
-        mau_window: int = 30,
+    in_path: str | Path,
+    out_path: str | Path,
+    mau_window: int = 30,
 ) -> Path:
     """
     Read raw events parquet, compute daily aggregates, and write an aggregated parquet.

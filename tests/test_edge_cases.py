@@ -10,11 +10,13 @@ from tlt.ingest import ingest_csv
 def test_ingest_missing_columns(tmp_path: Path) -> None:
     csv = tmp_path / "bad.csv"
     # Missing feature_id
-    pd.DataFrame({
-        "timestamp": ["2025-01-01T00:00:00Z"],
-        "user_id": ["u1"],
-        "event": ["click"],
-    }).to_csv(csv, index=False)
+    pd.DataFrame(
+        {
+            "timestamp": ["2025-01-01T00:00:00Z"],
+            "user_id": ["u1"],
+            "event": ["click"],
+        }
+    ).to_csv(csv, index=False)
 
     with pytest.raises(ValueError) as ei:
         ingest_csv(csv, tmp_path / "out.parquet")
@@ -24,12 +26,14 @@ def test_ingest_missing_columns(tmp_path: Path) -> None:
 
 def test_ingest_bad_timestamp(tmp_path: Path) -> None:
     csv = tmp_path / "bad_ts.csv"
-    pd.DataFrame({
-        "timestamp": ["not-a-time"],
-        "user_id": ["u1"],
-        "event": ["click"],
-        "feature_id": ["f1"],
-    }).to_csv(csv, index=False)
+    pd.DataFrame(
+        {
+            "timestamp": ["not-a-time"],
+            "user_id": ["u1"],
+            "event": ["click"],
+            "feature_id": ["f1"],
+        }
+    ).to_csv(csv, index=False)
 
     with pytest.raises(ValueError) as ei:
         ingest_csv(csv, tmp_path / "out.parquet")

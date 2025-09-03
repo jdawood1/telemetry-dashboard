@@ -2,6 +2,7 @@ from __future__ import annotations
 from pathlib import Path
 import pandas as pd
 import matplotlib
+
 matplotlib.use("Agg")  # CI/headless
 import matplotlib.pyplot as plt
 
@@ -41,7 +42,9 @@ def _plot_latency_box_by_feature(events: pd.DataFrame, out_path: Path) -> None:
     plt.close()
 
 
-def make_reports(in_path: str | Path, out_dir: str | Path, events_path: str | Path | None = None) -> Path:
+def make_reports(
+    in_path: str | Path, out_dir: str | Path, events_path: str | Path | None = None
+) -> Path:
     in_path, out_dir = Path(in_path), Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -103,11 +106,12 @@ def make_reports(in_path: str | Path, out_dir: str | Path, events_path: str | Pa
             total_events = len(df)
             n_users = df["user_id"].nunique()
             n_features = df["feature_id"].nunique()
-            n_days = pd.to_datetime(df["timestamp"], utc=True, errors="coerce").dt.floor("D").nunique()
+            n_days = (
+                pd.to_datetime(df["timestamp"], utc=True, errors="coerce").dt.floor("D").nunique()
+            )
             f.write(f"Days: {n_days}\n")
             f.write(f"Events: {total_events}\n")
             f.write(f"Unique users: {n_users}\n")
             f.write(f"Features: {n_features}\n")
 
     return out_dir
-

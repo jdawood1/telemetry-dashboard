@@ -19,26 +19,47 @@ def test_cli_smoke(tmp_path: Path) -> None:
     agg_parquet = data / "agg.parquet"
 
     # ingest
-    subprocess.check_call([
-        _py(), "-m", "tlt.cli", "ingest",
-        "--input", str(SAMPLE),
-        "--out", str(events_parquet),
-    ])
+    subprocess.check_call(
+        [
+            _py(),
+            "-m",
+            "tlt.cli",
+            "ingest",
+            "--input",
+            str(SAMPLE),
+            "--out",
+            str(events_parquet),
+        ]
+    )
     assert events_parquet.exists()
 
     # transform
-    subprocess.check_call([
-        _py(), "-m", "tlt.cli", "transform",
-        "--in", str(events_parquet),
-        "--out", str(agg_parquet),
-    ])
+    subprocess.check_call(
+        [
+            _py(),
+            "-m",
+            "tlt.cli",
+            "transform",
+            "--in",
+            str(events_parquet),
+            "--out",
+            str(agg_parquet),
+        ]
+    )
     assert agg_parquet.exists()
 
     # report
-    subprocess.check_call([
-        _py(), "-m", "tlt.cli", "report",
-        "--in", str(agg_parquet),
-        "--out", str(reports),
-    ])
+    subprocess.check_call(
+        [
+            _py(),
+            "-m",
+            "tlt.cli",
+            "report",
+            "--in",
+            str(agg_parquet),
+            "--out",
+            str(reports),
+        ]
+    )
     assert (reports / "feature_usage.png").exists()
     assert (reports / "metrics.txt").exists()
